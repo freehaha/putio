@@ -66,18 +66,18 @@ type MP4 struct {
 }
 
 type File struct {
-	Is_shared          bool    `json: "is_shared"`
-	Name               NString `json: "name"`
-	Screenshot         NString `json: "screenshot"` // returns url to image
-	Created_at         NString `json: "created_at"` // in iso8601 format
-	Opensubtitles_hash NString `json: "opensubtitles_hash"`
-	Parent_id          NInt64  `json: "parent_id"` // parent folder id
-	Is_mp4_available   bool    `json: "is_mp4_available"`
-	Content_type       NString `json: "content_type"`
-	Crc32              NString `json: "crc32"`
-	Icon               NString `json: "icon"` // returns url to screenshot image in icon size
-	Id                 NInt64  `json: "id"`
-	Size               NInt64  `json: "size"`
+	Is_shared          bool    `json:"is_shared"`
+	Name               NString `json:"name"`
+	Screenshot         NString `json:"screenshot"` // returns url to image
+	Created_at         NString `json:"created_at"` // in iso8601 format
+	Opensubtitles_hash NString `json:"opensubtitles_hash"`
+	Parent_id          NInt64  `json:"parent_id"` // parent folder id
+	Is_mp4_available   bool    `json:"is_mp4_available"`
+	Content_type       NString `json:"content_type"`
+	Crc32              NString `json:"crc32"`
+	Icon               NString `json:"icon"` // returns url to screenshot image in icon size
+	Id                 NInt64  `json:"id"`
+	Size               NInt64  `json:"size"`
 }
 
 type Files struct {
@@ -90,31 +90,31 @@ type Files struct {
 }
 
 type Transfer struct {
-	Uploaded        NInt64  `json: "uploaded"`
-	EstimatedTime   NInt    `json: "estimated_time"`
-	PeersGetting    NInt    `json: "peers_getting_from_us"`
-	Extract         bool    `json: "extract"`
-	CurrentRatio    float64 `json: "current_ratio"`
-	Size            NInt64  `json: "size"`
-	UpSpeed         NInt64  `json: "up_speed"`
-	Id              NInt64  `json: "id"`
-	Source          NString `json: "source"`
-	Subscription_id NInt64  `json: "subscription_id"`
-	StatusMessage   NString `json: "status_message"`
-	Status          NString `json: "status"`
-	DownSpeed       NString `json: "down_speed"`
-	PeersConnected  NInt    `json: "peers_connected"`
-	Downloaded      NInt64  `json: "downloaded"`
-	FileId          NInt64  `json: "file_id"`
-	PeersSending    NInt    `json: "peers_sending_to_us"`
-	PercentDone     NInt    `json: "percent_done"`
-	IsPrivate       bool    `json: "is_private"`
-	TrackerMessage  NString `json: "tracker_message"`
-	Name            NString `json: "name"`
-	CreatedAt       NString `json: "created_at"`
-	ErrorMessage    NString `json: "error_message"`
-	SaveParentId    NInt64  `json: "save_parent_id"`
-	CallbackUrl     NString `json: "callback_url"`
+	Uploaded        NInt64  `json:"uploaded"`
+	EstimatedTime   NInt    `json:"estimated_time"`
+	PeersGetting    NInt    `json:"peers_getting_from_us"`
+	Extract         bool    `json:"extract"`
+	CurrentRatio    float64 `json:"current_ratio"`
+	Size            NInt64  `json:"size"`
+	UpSpeed         NInt64  `json:"up_speed"`
+	Id              NInt64  `json:"id"`
+	Source          NString `json:"source"`
+	Subscription_id NInt64  `json:"subscription_id"`
+	StatusMessage   NString `json:"status_message"`
+	Status          NString `json:"status"`
+	DownSpeed       NInt64  `json:"down_speed"`
+	PeersConnected  NInt    `json:"peers_connected"`
+	Downloaded      NInt64  `json:"downloaded"`
+	FileId          NInt64  `json:"file_id"`
+	PeersSending    NInt    `json:"peers_sending_to_us"`
+	PercentDone     NInt    `json:"percent_done"`
+	IsPrivate       bool    `json:"is_private"`
+	TrackerMessage  NString `json:"tracker_message"`
+	Name            NString `json:"name"`
+	CreatedAt       NString `json:"created_at"`
+	ErrorMessage    NString `json:"error_message"`
+	SaveParentId    NInt64  `json:"save_parent_id"`
+	CallbackUrl     NString `json:"callback_url"`
 }
 
 type Transfers struct {
