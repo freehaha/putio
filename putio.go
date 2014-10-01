@@ -165,7 +165,17 @@ type Putio struct {
 }
 
 func (p *Putio) GetReqBody(path string) (bodybytes []byte, err error) {
-	url := BaseUrl + path + oauthparam + p.OauthToken
+	return p.GetReqBodyParams(path, nil)
+}
+
+func (p *Putio) GetReqBodyParams(path string, params url.Values) (bodybytes []byte, err error) {
+	var url string
+	if params == nil {
+		url = BaseUrl + path + oauthparam + p.OauthToken
+	} else {
+		params.Add("oauth_token", p.OauthToken)
+		url = BaseUrl + path + "?" + params.Encode()
+	}
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -198,7 +208,14 @@ func (p *Putio) PostFilesReq(path string, data url.Values) (files *Files, jsonst
 }
 
 func (p *Putio) GetFilesReq(path string) (files *Files, jsonstr string, err error) {
-	bodybytes, err := p.GetReqBody(path)
+	return p.GetFilesReqParams(path, nil)
+}
+
+func (p *Putio) GetFilesReqParams(path string, params url.Values) (files *Files, jsonstr string, err error) {
+	if params == nil {
+		params = make(url.Values)
+	}
+	bodybytes, err := p.GetReqBodyParams(path, params)
 	if err != nil {
 		return nil, string(bodybytes), err
 	}
@@ -211,6 +228,13 @@ func (p *Putio) GetFilesReq(path string) (files *Files, jsonstr string, err erro
 // https://api.put.io/v2/docs/#files-list
 func (p *Putio) FilesList() (files *Files, jsonstr string, err error) {
 	return p.GetFilesReq("files/list")
+}
+
+func (p *Putio) FilesListDir(dirNo NInt64) (files *Files, jsonstr string, err error) {
+	var vals url.Values
+	vals = make(url.Values)
+	vals.Add("parent_id", strconv.FormatInt(int64(dirNo), 10))
+	return p.GetFilesReqParams("files/list", vals)
 }
 
 // https://api.put.io/v2/docs/#files-search
