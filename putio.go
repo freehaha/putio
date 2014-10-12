@@ -9,46 +9,6 @@ import (
 )
 
 // fix problems with json not handling null as a value
-type NString string
-type NInt int
-type NInt64 int64
-
-func (s *NString) UnmarshalJSON(b []byte) error {
-	if string(b) == "null" { // now THIS is dumb.
-		s = new(NString)
-		return nil
-	}
-	var tmp string
-	if err := json.Unmarshal(b, &tmp); err != nil {
-		return err
-	}
-	*s = NString(tmp)
-	return nil
-}
-func (i *NInt) UnmarshalJSON(b []byte) error {
-	if string(b) == "null" { // now THIS is dumb.
-		i = new(NInt)
-		return nil
-	}
-	var tmp int
-	if err := json.Unmarshal(b, &tmp); err != nil {
-		return err
-	}
-	*i = NInt(tmp)
-	return nil
-}
-func (i *NInt64) UnmarshalJSON(b []byte) error {
-	if string(b) == "null" { // now THIS is dumb.
-		i = new(NInt64)
-		return nil
-	}
-	var tmp int64
-	if err := json.Unmarshal(b, &tmp); err != nil {
-		return err
-	}
-	*i = NInt64(tmp)
-	return nil
-}
 
 const (
 	BaseUrl = "https://api.put.io/v2/"
@@ -58,26 +18,26 @@ var oauthparam = "?oauth_token="
 var oathtoken string
 
 type MP4 struct {
-	Status       NString
-	Stream_url   NString
-	Download_url NString
-	Size         NInt64
-	Percent_done NInt
+	Status       string
+	Stream_url   string
+	Download_url string
+	Size         int64
+	Percent_done int
 }
 
 type File struct {
-	Is_shared          bool    `json:"is_shared"`
-	Name               NString `json:"name"`
-	Screenshot         NString `json:"screenshot"` // returns url to image
-	Created_at         NString `json:"created_at"` // in iso8601 format
-	Opensubtitles_hash NString `json:"opensubtitles_hash"`
-	Parent_id          NInt64  `json:"parent_id"` // parent folder id
-	Is_mp4_available   bool    `json:"is_mp4_available"`
-	Content_type       NString `json:"content_type"`
-	Crc32              NString `json:"crc32"`
-	Icon               NString `json:"icon"` // returns url to screenshot image in icon size
-	Id                 NInt64  `json:"id"`
-	Size               NInt64  `json:"size"`
+	Is_shared          bool   `json:"is_shared"`
+	Name               string `json:"name"`
+	Screenshot         string `json:"screenshot"` // returns url to image
+	Created_at         string `json:"created_at"` // in iso8601 format
+	Opensubtitles_hash string `json:"opensubtitles_hash"`
+	Parent_id          int64  `json:"parent_id"` // parent folder id
+	Is_mp4_available   bool   `json:"is_mp4_available"`
+	Content_type       string `json:"content_type"`
+	Crc32              string `json:"crc32"`
+	Icon               string `json:"icon"` // returns url to screenshot image in icon size
+	Id                 int64  `json:"id"`
+	Size               int64  `json:"size"`
 }
 
 type Files struct {
@@ -86,35 +46,35 @@ type Files struct {
 	Mp4    MP4    // for mp4 streaming results
 	Status string
 	Parent File
-	Next   NString
+	Next   string
 }
 
 type Transfer struct {
-	Uploaded        NInt64  `json:"uploaded"`
-	EstimatedTime   NInt    `json:"estimated_time"`
-	PeersGetting    NInt    `json:"peers_getting_from_us"`
-	Extract         bool    `json:"extract"`
-	CurrentRatio    float64 `json:"current_ratio"`
-	Size            NInt64  `json:"size"`
-	UpSpeed         NInt64  `json:"up_speed"`
-	Id              NInt64  `json:"id"`
-	Source          NString `json:"source"`
-	Subscription_id NInt64  `json:"subscription_id"`
-	StatusMessage   NString `json:"status_message"`
-	Status          NString `json:"status"`
-	DownSpeed       NInt64  `json:"down_speed"`
-	PeersConnected  NInt    `json:"peers_connected"`
-	Downloaded      NInt64  `json:"downloaded"`
-	FileId          NInt64  `json:"file_id"`
-	PeersSending    NInt    `json:"peers_sending_to_us"`
-	PercentDone     NInt    `json:"percent_done"`
-	IsPrivate       bool    `json:"is_private"`
-	TrackerMessage  NString `json:"tracker_message"`
-	Name            NString `json:"name"`
-	CreatedAt       NString `json:"created_at"`
-	ErrorMessage    NString `json:"error_message"`
-	SaveParentId    NInt64  `json:"save_parent_id"`
-	CallbackUrl     NString `json:"callback_url"`
+	Uploaded        int64  `json:"uploaded"`
+	EstimatedTime   int    `json:"estimated_time"`
+	PeersGetting    int    `json:"peers_getting_from_us"`
+	Extract         bool   `json:"extract"`
+	CurrentRatio    string `json:"current_ratio"`
+	Size            int64  `json:"size"`
+	UpSpeed         int64  `json:"up_speed"`
+	Id              int64  `json:"id"`
+	Source          string `json:"source"`
+	Subscription_id int64  `json:"subscription_id"`
+	StatusMessage   string `json:"status_message"`
+	Status          string `json:"status"`
+	DownSpeed       int64  `json:"down_speed"`
+	PeersConnected  int    `json:"peers_connected"`
+	Downloaded      int64  `json:"downloaded"`
+	FileId          int64  `json:"file_id"`
+	PeersSending    int    `json:"peers_sending_to_us"`
+	PercentDone     int    `json:"percent_done"`
+	IsPrivate       bool   `json:"is_private"`
+	TrackerMessage  string `json:"tracker_message"`
+	Name            string `json:"name"`
+	CreatedAt       string `json:"created_at"`
+	ErrorMessage    string `json:"error_message"`
+	SaveParentId    int64  `json:"save_parent_id"`
+	CallbackUrl     string `json:"callback_url"`
 }
 
 type Transfers struct {
@@ -124,9 +84,9 @@ type Transfers struct {
 }
 
 type Disk struct {
-	Available NInt64
-	Used      NInt64
-	Size      NInt64
+	Available int64
+	Used      int64
+	Size      int64
 }
 
 type UserInfo struct {
@@ -230,7 +190,7 @@ func (p *Putio) FilesList() (files *Files, jsonstr string, err error) {
 	return p.GetFilesReq("files/list")
 }
 
-func (p *Putio) FilesListDir(dirNo NInt64) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesListDir(dirNo int64) (files *Files, jsonstr string, err error) {
 	var vals url.Values
 	vals = make(url.Values)
 	vals.Add("parent_id", strconv.FormatInt(int64(dirNo), 10))
@@ -243,7 +203,7 @@ func (p *Putio) FilesSearch(query string, pageno string) (files *Files, jsonstr 
 }
 
 // https://api.put.io/v2/docs/#files-create-folder
-func (p *Putio) FilesCreateFolder(name string, parent_id NInt64) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesCreateFolder(name string, parent_id int64) (files *Files, jsonstr string, err error) {
 	data := make(url.Values)
 	data.Set("name", name)
 	data.Set("parent_id", string(parent_id))
@@ -251,39 +211,39 @@ func (p *Putio) FilesCreateFolder(name string, parent_id NInt64) (files *Files, 
 }
 
 // https://api.put.io/v2/docs/#files-id
-func (p *Putio) FilesId(id NInt64) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesId(id int64) (files *Files, jsonstr string, err error) {
 	return p.GetFilesReq("files/" + strconv.FormatInt(int64(id), 10))
 }
 
 // https://api.put.io/v2/docs/#files-delete
-func (p *Putio) FilesDelete(file_id NInt64) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesDelete(file_id int64) (files *Files, jsonstr string, err error) {
 	return p.PostFilesReq("files/delete", url.Values{"file_ids": {strconv.FormatInt(int64(file_id), 10)}})
 }
 
 // https://api.put.io/v2/docs/#files-rename
-func (p *Putio) FilesRename(file_id NInt64, name string) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesRename(file_id int64, name string) (files *Files, jsonstr string, err error) {
 	return p.PostFilesReq("files/rename", url.Values{"file_id": {strconv.FormatInt(int64(file_id), 10)}, "name": {name}})
 }
 
 // https://api.put.io/v2/docs/#files-move
-func (p *Putio) FilesMove(file_id NInt64, parent_id NInt64) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesMove(file_id int64, parent_id int64) (files *Files, jsonstr string, err error) {
 	return p.PostFilesReq("files/move", url.Values{"file_id": {strconv.FormatInt(int64(file_id), 10)}, "parent_id": {strconv.FormatInt(int64(parent_id), 10)}})
 }
 
 // https://api.put.io/v2/docs/#files-mp4-post
-func (p *Putio) FilesMP4(id NInt64) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesMP4(id int64) (files *Files, jsonstr string, err error) {
 	return p.PostFilesReq("files/"+strconv.FormatInt(int64(id), 10)+"/mp4", url.Values{"id": {strconv.FormatInt(int64(id), 10)}})
 }
 
 // https://api.put.io/v2/docs/#files-mp4-post
-func (p *Putio) FilesMP4Status(id NInt64) (files *Files, jsonstr string, err error) {
+func (p *Putio) FilesMP4Status(id int64) (files *Files, jsonstr string, err error) {
 	return p.GetFilesReq("files/" + strconv.FormatInt(int64(id), 10) + "/mp4")
 }
 
 // https://api.put.io/v2/docs/#files-id-download
-// in this case we will just return the url to download from and leave it up to 
+// in this case we will just return the url to download from and leave it up to
 // the client to actually download it. It's a redirect so can't use the usual request method
-func (p *Putio) FilesDownload(id NInt64) (urlstr string, err error) {
+func (p *Putio) FilesDownload(id int64) (urlstr string, err error) {
 	path := "download"
 
 	url := BaseUrl + "files/" + strconv.FormatInt(int64(id), 10) + "/" + path + oauthparam + p.OauthToken
@@ -330,17 +290,17 @@ func (p *Putio) TransfersList() (transfers *Transfers, jsonstr string, err error
 }
 
 // https://api.put.io/v2/docs/#transfers-add
-func (p *Putio) TransfersAdd(transfer_url string, save_parent_id NInt64, extract bool) (transfers *Transfers, jsonstr string, err error) {
+func (p *Putio) TransfersAdd(transfer_url string, save_parent_id int64, extract bool) (transfers *Transfers, jsonstr string, err error) {
 	return p.PostTransfersReq("transfers/add", url.Values{"url": {transfer_url}, "save_parent_id": {strconv.FormatInt(int64(save_parent_id), 10)}, "extract": {strconv.FormatBool(extract)}})
 }
 
 // https://api.put.io/v2/docs/#transfers-add
-func (p *Putio) TransfersCancel(transfer_id NInt64) (transfers *Transfers, jsonstr string, err error) {
+func (p *Putio) TransfersCancel(transfer_id int64) (transfers *Transfers, jsonstr string, err error) {
 	return p.PostTransfersReq("transfers/cancel", url.Values{"transfer_ids": {strconv.FormatInt(int64(transfer_id), 10)}})
 }
 
 // https://api.put.io/v2/docs/#transfers-id
-func (p *Putio) TransfersId(id NInt64) (transfers *Transfers, jsonstr string, err error) {
+func (p *Putio) TransfersId(id int64) (transfers *Transfers, jsonstr string, err error) {
 	return p.GetTransfersReq("transfers/" + strconv.FormatInt(int64(id), 10))
 }
 
